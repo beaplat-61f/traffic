@@ -1,0 +1,19 @@
+{
+    "name": "beaplat/traffic",
+    "description": "The traffic API for Laravel 5.x",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zhenfeng",
+            "email": "shizhenfeng@ltbl.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "~5.3|~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+        "Beaplat\\Traffic\\": "src/"
+    }
+  }
+}
