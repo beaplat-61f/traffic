@@ -8,9 +8,7 @@
             "email": "shizhenfeng@ltbl.com"
         }
     ],
-    "require": {
-        "guzzlehttp/guzzle": "~5.3|~6.0"
-    },
+    "require": {},
     "autoload": {
         "psr-4": {
         "Beaplat\\Traffic\\": "src/"

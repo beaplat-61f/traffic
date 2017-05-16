@@ -39,10 +39,10 @@ class TrafficHelper
     {
         try {
             if (! $this->checkTrafficValid($this->getCarrier($mobile), $size)) {
-                throw new TrafficException('该运营商没有对应的流量包');
+                throw new TrafficException('Can not find the prize of the carrier');
             }
         } catch (TrafficException $e) {
-            throw new TrafficException($e->getMessage());
+            throw new TrafficException($e->getMessage(), $e->getCode());
         }
 
         $timestamp = time() * 1000;
@@ -70,10 +70,16 @@ class TrafficHelper
                 'traffic_size' => $size
             ]);
         } else {
-            throw new TrafficException('创建订单失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
+//            throw new TrafficException('Create order fail, error message: ' . $contents->msg . ', error code: ' . $contents->code);
+            throw new TrafficException($contents->msg, $contents->code);
         }
     }
 
+    /**
+     * 查询渠道商余额
+     *
+     * @return mixed
+     */
     public function balance()
     {
         $timestamp = time() * 1000;
@@ -91,7 +97,7 @@ class TrafficHelper
         if ($contents->code === '0000') {
             return $contents->object->agent_balance;
         } else {
-            throw new TrafficException('查询余额失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
+            throw new TrafficException($contents->msg, $contents->code);
         }
     }
 
@@ -122,7 +128,8 @@ class TrafficHelper
         if ($contents->code === '0000') {
             return $contents->object;
         } else {
-            throw new TrafficException('查询状态失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
+//            throw new TrafficException('查询状态失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
+            throw new TrafficException($contents->msg, $contents->code);
         }
     }
 
@@ -142,7 +149,7 @@ class TrafficHelper
     public function checkTrafficValid($carrier, $size)
     {
         if (! in_array($carrier, ['unicom', 'telecom', 'mobile'])) {
-            throw new TrafficException('无效的手机运营商');
+            throw new TrafficException('Invalid carrier');
         }
         if (in_array($size, $this->traffic_carrier[$carrier])) {
             return true;
@@ -175,7 +182,8 @@ class TrafficHelper
         if ($contents->code === '0000') {
             return $contents->object->carrier;
         } else {
-            throw new TrafficException('查询失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
+//            throw new TrafficException('查询失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
+            throw new TrafficException($contents->msg, $contents->code);
         }
     }
 
@@ -198,7 +206,7 @@ class TrafficHelper
             $order->save();
             return $order;
         } else {
-            throw new TrafficException('找不到对应的订单');
+            throw new TrafficException('Can not find the order with agent bill:' . $orderAgentBill);
         }
     }
 }
