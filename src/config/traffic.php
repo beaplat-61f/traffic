@@ -1,27 +1,91 @@
 <?php
 return [
-    'base_url' => env('TRAFFIC_BASE_URL', 'http://120.24.173.64:7001/index.do'),
+    /**
+     * 可选值
+     * future   未来无线
+     * u_bigger 优比格
+     */
+    'default' => 'u_bigger',
 
-    'agent_id' => env('TRAFFIC_AGENT_ID', ''),
+    'platform' => [
+        // 未来无线
+        'future' => [
+            'base_url' => env('TRAFFIC_BASE_URL', 'http://120.24.173.64:7001/index.do'),
 
-    'app_key' => env('TRAFFIC_APP_KEY', ''),
+            'agent_id' => env('TRAFFIC_AGENT_ID', ''),
 
-    'app_secret' => env('TRAFFIC_APP_SECRET', ''),
+            'app_key' => env('TRAFFIC_APP_KEY', ''),
 
-    // 回调地址
-    'order_agent_back_url' => env('TRAFFIC_ORDER_AGENT_BACK_URL', ''),
+            'app_secret' => env('TRAFFIC_APP_SECRET', ''),
 
-    // 如果该参数为空或者为all时，走全国通道
-    // 如果该参数是某省份拼音时，走分省通道
-    'traffic_usage_province' => env('TRAFFIC_AGENT_USAGE_PROVINCE', 'all'),
+            // 回调地址
+            'order_agent_back_url' => env('TRAFFIC_ORDER_AGENT_BACK_URL', ''),
 
-    // 全国三网流量的标准包 单位为M
-    'traffic_carrier' => [
-        // 联通
-        'unicom'  => [20, 50, 100, 200, 500],
+            // 如果该参数为空或者为all时，走全国通道
+            // 如果该参数是某省份拼音时，走分省通道
+            'traffic_usage_province' => env('TRAFFIC_AGENT_USAGE_PROVINCE', 'all'),
 
-        'telecom' => [5, 10, 30, 50, 100, 200, 500, 1024],
+            // 全国三网流量的标准包 单位为M
+            'traffic_carrier' => [
+                // 联通
+                'unicom'  => [20, 50, 100, 200, 500],
 
-        'mobile'  => [10, 30, 70, 150, 500, 1024, 2*1024, 3*1024, 4*1024, 6*1024, 11*1024]
+                'telecom' => [5, 10, 30, 50, 100, 200, 500, 1024],
+
+                'mobile'  => [10, 30, 70, 150, 500, 1024, 2*1024, 3*1024, 4*1024, 6*1024, 11*1024]
+            ],
+
+            // 特殊包体 通用流量包大小 单位M 不要随意修改
+            'common_traffic_size' => [30, 50, 100, 200, 500, 1024],
+        ],
+
+        // 优比格
+        'u_bigger' => [
+            'channel_code' => env('TRAFFIC_CHANNEL_CODE', ''),
+            'key' => env('TRAFFIC_KEY', ''),
+
+            'product_id' => [
+                // 电信
+                'telecom' => [
+                    5    => '5000005',
+                    10   => '5000010',
+                    30   => '5000030',
+                    50   => '5000050',
+                    100  => '5000100',
+                    200  => '5000200',
+                    500  => '5000500',
+                    1024 => '5001024'
+                ],
+
+                // 移动
+                'mobile' => [
+                    10        => '6000010',
+                    30        => '6000030',
+                    70        => '6000070',
+                    100       => '6000100',
+                    150       => '6000150',
+                    300       => '6000300',
+                    500       => '6000500',
+                    1024      => '6001024',
+                    2 * 1024  => '6002048',
+                    3 * 1024  => '6003072',
+                    4 * 1024  => '6004096',
+                    6 * 1024  => '6006144',
+                    11 * 1024 => '6011264',
+                ],
+
+                // 联通
+                'unicom' => [
+                    20   => '7000020',
+                    30   => '7000030',
+                    50   => '7000050',
+                    100  => '7000100',
+                    200  => '7000200',
+                    300  => '7000300',
+                    500  => '7000500',
+                    1024 => '7001024'
+                ],
+            ]
+        ],
     ],
 ];

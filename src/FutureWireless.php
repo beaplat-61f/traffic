@@ -5,40 +5,53 @@ namespace Beaplat\Traffic;
 use GuzzleHttp\Client;
 use Beaplat\Traffic\Exceptions\TrafficException;
 
-class TrafficHelper
+class FutureWireless extends AbstractTraffic
 {
+    private $client;
+    private $base_url;
+    private $agent_id;
+    private $app_key;
+    private $app_secret;
+    private $order_agent_back_url;
+    private $traffic_usage_province;
+    private $traffic_carrier;
+    private $common_traffic_size;
+
     public function __construct()
     {
         $this->client = new Client();
 
-        $this->base_url = config('traffic.base_url');
+        $this->base_url = config('traffic.platform.future.base_url');
 
-        $this->agent_id = config('traffic.agent_id');
+        $this->agent_id = config('traffic.platform.future.agent_id');
 
-        $this->app_key = config('traffic.app_key');
+        $this->app_key = config('traffic.platform.future.app_key');
 
-        $this->app_secret = config('traffic.app_secret');
+        $this->app_secret = config('traffic.platform.future.app_secret');
 
-        $this->order_agent_back_url = config('traffic.order_agent_back_url');
+        $this->order_agent_back_url = config('traffic.platform.future.order_agent_back_url');
 
-        $this->traffic_usage_province = config('traffic.traffic_usage_province');
+        $this->traffic_usage_province = config('traffic.platform.future.traffic_usage_province');
 
-        $this->traffic_carrier = config('traffic.traffic_carrier');
+        $this->traffic_carrier = config('traffic.platform.future.traffic_carrier');
+
+        $this->common_traffic_size = config('traffic.platform.future.common_traffic_size');
     }
 
     /**
      * 提交流量充值订单
      *
-     * @param integer $userId
      * @param string  $mobile
      * @param integer $size
      *
      * @return mixed
      */
-    public function submit($userId, $mobile, $size)
+    public function submit($mobile, $size)
     {
         try {
-            if (! $this->checkTrafficValid($this->getCarrier($mobile), $size)) {
+            if (! in_array($size, $this->common_traffic_size)
+                && ! $this->checkTrafficValid($this->getCarrier($mobile), $size)
+            ) {
                 throw new TrafficException('Can not find the prize of the carrier');
             }
         } catch (TrafficException $e) {
@@ -64,13 +77,12 @@ class TrafficHelper
         $contents = json_decode($response->getBody()->getContents());
         if ($contents->code === '0000') {
             return TrafficOrder::create([
-                'user_id' => $userId,
+//                'user_id' => $userId,
                 'order_agent_bill' => $orderAgentBill,
                 'order_tel' => $mobile,
                 'traffic_size' => $size
             ]);
         } else {
-//            throw new TrafficException('Create order fail, error message: ' . $contents->msg . ', error code: ' . $contents->code);
             throw new TrafficException($contents->msg, $contents->code);
         }
     }
@@ -165,7 +177,7 @@ class TrafficHelper
      *
      * @return mixed
      */
-    public function getCarrier($mobile)
+    /*public function getCarrier($mobile)
     {
         $timestamp = time() * 1000;
         $response = $this->client->request('GET', $this->base_url, [
@@ -182,10 +194,9 @@ class TrafficHelper
         if ($contents->code === '0000') {
             return $contents->object->carrier;
         } else {
-//            throw new TrafficException('查询失败，错误信息：' . $contents->msg . '错误码：' . $contents->code);
             throw new TrafficException($contents->msg, $contents->code);
         }
-    }
+    }*/
 
     /**
      * 回调更新订单
@@ -208,5 +219,18 @@ class TrafficHelper
         } else {
             throw new TrafficException('Can not find the order with agent bill:' . $orderAgentBill);
         }
+    }
+
+    /**
+     * 计算充值一笔所需的价格TODO
+     *
+     * @param string $mobile
+     * @param int    $size
+     *
+     * @return int
+     */
+    public function prize($mobile, $size)
+    {
+        return 99;
     }
 }
