@@ -8,7 +8,9 @@
             "email": "beaplat@qq.com"
         }
     ],
-    "require": {},
+    "require": {
+        "guzzlehttp/guzzle": "^6.2"
+    },
     "autoload": {
         "psr-4": {
             "Beaplat\\Traffic\\": "src/"
