@@ -2,7 +2,7 @@
 return [
     /**
      * 可选值
-     * future   未来无线
+     * future_wireless 未来无线
      * u_bigger 优比格
      */
     'default' => 'u_bigger',
