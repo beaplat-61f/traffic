@@ -20,7 +20,7 @@ class TrafficFactory
                 break;
         }*/
         // 更加简练的写法
-        $class = ucfirst(camel_case($platform));
+        $class = __NAMESPACE__ . '\\'. ucfirst(camel_case($platform));
         return new $class;
     }
 }
